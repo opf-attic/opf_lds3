@@ -1,0 +1,43 @@
+.message {
+	margin-left: 43px;
+	margin-right: 30px;
+	padding: 10px;
+	border: 1px solid #D3D3D3;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	text-align: center;
+}
+.success {
+	background: none repeat scroll 0 0 #CF9;
+	color: black;
+	font-weight: bold;
+}
+.error {
+	background: none repeat scroll 0 0 #C33;
+	color: black;
+	font-weight: bold;
+}
+.warning {
+	background: none repeat scroll 0 0 #F63;
+}
+.radiotd {
+	padding-top: 11px;
+	width: 36px;
+	height: 36px;
+}
+.dataplusminustd {
+	padding-top: 7px;
+	width: 36px;
+	height: 36px;
+}
+.subjecttd {
+	padding-top: 10px;
+	font-size: 1.4em;
+}
+.plusminus {
+	font-size: 2em;
+	font-weight: bold;
+	cursor: pointer;
+}
