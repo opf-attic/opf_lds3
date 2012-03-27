@@ -1,0 +1,17 @@
+<?php
+	$company_name = "Company";
+	$company_website = "http://www.company.org";
+	$http_doc_prefix = "http://dev.company.org/doc/";
+	$local_doc_prefix = "/home/dev.compant.org/data/doc/";
+
+	$google_client_id = '123456789012-abcdefghijklmnopqrstuvwxyzabcdef.apps.googleusercontent.com';
+	$google_client_secret = 'a1b2c3e4f5g6h7i8j9k10l11';
+	
+	$database_server = 'localhost';
+	$database_user = 'user';
+	$database_password = 'password';
+	$database_name = 'database';
+
+	$moderate_accounts = false;
+
+?>
