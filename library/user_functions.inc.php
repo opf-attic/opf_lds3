@@ -16,6 +16,15 @@
 
 	}
 
+	function getUserID() {
+		$user_email = $_SESSION["user_email"];
+		
+		$query = "select id from Users where Users.email='$user_email';";
+		$res = mysql_query($query);
+		$row = mysql_fetch_row($res);
+		return $row[0];
+	}
+
 	function userExists($user_email) {
 		$query = "select * from Users where Users.email='$user_email';";
 		$res = mysql_query($query);

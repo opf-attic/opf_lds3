@@ -5,7 +5,7 @@ function getGUID() {
 	include_once('config.php');
 	$exists = 1;
 	while ($exists) {
-		$guid = GererateGUID();
+		$guid = GenerateGUID();
 		$path = $local_doc_prefix . $guid;
 		if (!(is_dir($path))) {
 			return $guid;
@@ -13,7 +13,7 @@ function getGUID() {
 	}
 }
 
-function GererateGUID()
+function GenerateGUID()
 {
     if (function_exists('com_create_guid') === true)
     {
