@@ -1,6 +1,7 @@
 <?php
 	$company_name = "Company";
 	$company_website = "http://www.company.org";
+	$base_domain = "dev.company.org";
 	$http_doc_prefix = "http://dev.company.org/doc/";
 	$local_doc_prefix = "/home/dev.compant.org/data/doc/";
 
