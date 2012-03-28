@@ -61,13 +61,29 @@
 	}
 
 	function getDefaultUserStatus() {
-		require_once('config.php');
+		require('config.php');
 		if ($moderate_accounts) {
 			return 0;
 		} else {
 			return 1;
 		}
 		return 1;
+	}
+
+	function addUserDataToGraph($graph,$subject,$date) {
+		// Write all the import data in using graphite
+
+		$to_add = '
+			@prefix dct: <http://purl.org/dc/terms/> .
+	
+			<' . $subject .'>
+			dct:creator "Dave Tarrant";
+			dct:dateSubmitted "'.$date.'".
+		    ';
+
+		    $added = $graph->addTurtle($subject,$to_add);
+
+		    return $graph;
 	}
 
 ?>

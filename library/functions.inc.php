@@ -23,16 +23,62 @@ function GenerateGUID()
     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
 
+function isValidGUID($guid) {
+	if (preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $guid)) {
+		return $true;
+	}
+	return false;
+}	
+
+function getGUIDFromSubject($subject) {
+	require('config.php');
+		
+	if (substr($subject,0,strlen($http_doc_prefix)) == $http_doc_prefix) {
+		$id = substr($subject,(strpos($subject,$http_doc_prefix) + strlen($http_doc_prefix)),strlen($subject));
+		$id = @substr($id,0,strlen("A98C5A1E-A742-4808-96FA-6F409E799937"));
+		return $id;
+	}
+	return null;
+}
+
+function getGUIDDateURI($guid_uri,$date) {
+	
+	if ($guid_uri == "") {
+		return $guid_uri;
+	}
+
+	if (substr($guid_uri,-1) == "/") {
+                $guid_uri .= $date;
+        } else {
+                $guid_uri .= "/" . $date;
+        }
+
+	return $guid_uri;
+
+}
+
+function getLocalFromGUID($guid)  {
+	require('config.php');
+
+	return $local_doc_prefix . $guid;
+}
+
+function getURIFromGUID($guid) {
+	require('config.php');
+
+	return $http_doc_prefix . $guid;
+}
+
 function getLocalFromURI($uri) 
 {
-	global $http_doc_prefix, $local_doc_prefix;
+	require('config.php');
 	
 	return str_replace($http_doc_prefix, $local_doc_prefix, $uri);
 }
 
 function getGUIDURIFromLocal($local) 
 {
-	global $http_doc_prefix, $local_doc_prefix;
+	require('config.php');
 	
 	$uri = str_replace($local_doc_prefix, $http_doc_prefix, $local);
 	if (substr($uri,-4) == ".rdf") {
