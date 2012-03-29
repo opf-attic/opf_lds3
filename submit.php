@@ -36,7 +36,7 @@ if (!$error) {
 	$uris = explode(" : ",$message);
 	$location_uri = $uris[0];
 	$content_uri = $uris[1];
-	$error = 200;
+	$error = 201;
 }
 
 $content = "";
@@ -54,7 +54,7 @@ $content_length = strlen($content);
 
 ob_start();
 
-#outputHTTPHeader($error);
+outputHTTPHeader($error);
 
 header("Cache-Control: no-cache, must-revalidate", true); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT", true);
