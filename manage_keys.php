@@ -5,7 +5,7 @@
 
 	if ($_POST["description"] != "") {
 		#ASSUME THIS WORKS
-		$user_id = getUserID();
+		$user_id = getUserID($_SESSION["user_email"]);
 		$description = $_POST["description"];
 		if (!$user_id) {
 			output_message("An error occured (user_id unknown) while trying to create a new key pair, please try again later","error");

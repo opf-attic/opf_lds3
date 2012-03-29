@@ -1,6 +1,6 @@
 <?php
 	require_once('key_management.inc.php');
-	$user_id = getUserID();
+	$user_id = getUserID($_SESSION["user_email"]);
 	if ($user_id) {
 		$keys = getKeyPairs($user_id);	
 	}

@@ -17,6 +17,13 @@ function getSecretKey($user_key) {
 	$row = mysql_fetch_row($res);
 	return $row[0];
 }
+		
+function getAccessKeyDescription($user_key) {
+	$query = "SELECT descrip from Access_Keys where access_key='$user_key';";
+	$res = mysql_query($query);
+	$row = mysql_fetch_row($res);
+	return $row[0];
+}
 
 function createNewKeyPair($user_id,$description) {
 	$key = generateRandomKey();
