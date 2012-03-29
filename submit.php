@@ -32,7 +32,9 @@ $handle = fopen($file_path,"w");
 fwrite($handle,file_get_contents("php://input"));
 fclose($handle);
 
-list($error,$message) = addNewDocument($file_path,$user_key);
+$doc_uri = $_GET["Doc-URI"];
+
+list($error,$message) = addNewDocument($file_path,$user_key,$doc_uri);
 
 if (!$error) {
 	$uris = explode(" : ",$message);

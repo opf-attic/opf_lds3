@@ -61,4 +61,14 @@ function writeGraphToFile($graph,$file_path) {
 
 }
 
+function reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri) {
+	$data = file_get_contents($file_path);
+        $data = str_replace($incoming_subject,$guid_date_uri,$data);
+        $handle = fopen($file_path,"w");
+        fwrite($handle,$data);
+        fclose($handle);
+	return $file_path;
+}
+
+
 ?>
