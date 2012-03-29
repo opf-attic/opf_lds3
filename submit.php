@@ -17,6 +17,8 @@ require_once('connect.inc.php');
 
 $request_headers = apache_request_headers();
 $authorized = isRequestAuthorized($request_headers);
+$authentication_header = getAuthenticationHeader($request_headers);
+$user_key = getUserKeyFromHeader($authentication_header);
 
 if ( !$authorized ) {
         header("HTTP/1.0 403 Forbidden");
@@ -30,7 +32,7 @@ $handle = fopen($file_path,"w");
 fwrite($handle,file_get_contents("php://input"));
 fclose($handle);
 
-list($error,$message) = addNewDocument($file_path);
+list($error,$message) = addNewDocument($file_path,$user_key);
 
 if (!$error) {
 	$uris = explode(" : ",$message);

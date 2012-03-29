@@ -6,7 +6,7 @@ include_once('library/user_functions.inc.php');
 include_once('library/graph_functions.inc.php');
 include_once('library/index_functions.inc.php');
 
-function addNewDocument($file_path) {
+function addNewDocument($file_path,$user_key) {
 	
 	$graph = getGraph($file_path);
 	if (!$graph) {
@@ -30,14 +30,14 @@ function addNewDocument($file_path) {
 		return array ("400","GUID " . $guid . " already in use to update it please POST this document to " . $guid_uri);
 	}
 	
-	list ($error,$guid_date_uri) = updateDocument($file_path,$subject,$guid_uri,$file_name);
+	list ($error,$guid_date_uri) = updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key);
 
 	return array ($error,"$guid_uri : $guid_date_uri");
 
 }
 
 
-function updateDocument($file_path,$subject,$guid_uri,$file_name) {
+function updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key) {
 
 	// Handle the upload need to sort out which URIs to re-write and rename
 	
@@ -57,7 +57,7 @@ function updateDocument($file_path,$subject,$guid_uri,$file_name) {
 
 	// Get the RDF Grap
 	$graph = getGraph($file_path);
-	$graph = addUserDataToGraph($graph,$subject,$date);
+	$graph = addUserDataToGraph($graph,$subject,$date,$user_key);
 	
 	$provenance_info = getProvenanceInfo($guid_uir,$subject,$local_dir);	
 	$graph = addProvenanceInfoToGraph($graph,$subject,$provenance_info);

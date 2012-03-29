@@ -16,10 +16,16 @@
 
 	}
 
-	function getUserID() {
-		$user_email = $_SESSION["user_email"];
+	function getUserID($user_email) {
 		
 		$query = "select id from Users where Users.email='$user_email';";
+		$res = mysql_query($query);
+		$row = mysql_fetch_row($res);
+		return $row[0];
+	}
+	
+	function getUserName($user_email) {
+		$query = "select name from Users where Users.email='$user_email';";
 		$res = mysql_query($query);
 		$row = mysql_fetch_row($res);
 		return $row[0];
@@ -70,20 +76,60 @@
 		return 1;
 	}
 
-	function addUserDataToGraph($graph,$subject,$date) {
-		// Write all the import data in using graphite
+	function getEmailFromAccessKey($access_key) {
+		$query = 'select Users.email from Users INNER JOIN Access_Keys ON Users.id=Access_Keys.user_id where Access_Keys.access_key="'.$access_key.'"';
+		$res = mysql_query($query);
+		$row = mysql_fetch_row($res);
+		return ($row[0]);
+	}
 
+	function addUserDataToGraph($graph,$subject,$date,$user_key) {
+		require_once("library/graphite/arc/ARC2.php");
+		require_once("library/graphite/Graphite.php");
+		include("config.php");
+		
+		// Write all the import data in using graphite
+	
+		$user_email = getEmailFromAccessKey($user_key);
+		$user_id = getUserID($user_email);
+		$user_name = getUserName($user_email);
+		$key_description = getAccessKeyDescription($user_key);
+
+		$user_uri = $id_uri_prefix . "users/" . $user_id;
+		$access_key_uri = $id_uri_prefix . "users/".$user_id . "/access_keys/" . $user_key;
+		
 		$to_add = '
 			@prefix dct: <http://purl.org/dc/terms/> .
 	
 			<' . $subject .'>
-			dct:creator "Dave Tarrant";
+			dct:publisher <'.$access_key_uri.'>;
 			dct:dateSubmitted "'.$date.'".
 		    ';
 
-		    $added = $graph->addTurtle($subject,$to_add);
+		$added = $graph->addTurtle($subject,$to_add);
+		
+		$to_add = '
+			@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+	
+			<' . $user_uri .'>
+			foaf:name "'.$user_name.'";
+			foaf:account <'.$access_key_uri.'>.
+		    ';
+		
+		$added = $graph->addTurtle($user_uri,$to_add);
+		
+		$to_add = '
+			@prefix dct: <http://purl.org/dc/terms/> .
+	
+			<' . $access_key_uri .'>
+			dct:identifier "'.$user_key.'";
+			dct:description "'.$key_description.'";
+			dct:creator <'.$user_uri.'>.
+		    ';
 
-		    return $graph;
+		$added = $graph->addTurtle($access_key_uri,$to_add);
+
+	        return $graph;
 	}
 
 ?>
