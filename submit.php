@@ -36,10 +36,11 @@ if (!$error) {
 	$uris = explode(" : ",$message);
 	$location_uri = $uris[0];
 	$content_uri = $uris[1];
+	$error = 200;
 }
 
 $content = "";
-$handle = fopen($location_uri,"r");
+$handle = fopen($content_uri.".rdf","r");
 if (!$handle) {
 	$error = 500;	
 	$message = "Error while retrieving content. Please contact system administrator";
@@ -49,17 +50,27 @@ while(!feof($handle)) {
 }
 fclose($handle);
 
-outputHTTPHeader($error);
+$content_length = strlen($content);
+
+ob_start();
+
+#outputHTTPHeader($error);
+
 header("Cache-Control: no-cache, must-revalidate", true); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT", true);
 
-if ($error != 201) {
+if ($error != 200 && $error != 201) {
 	echo $message;
 	exit();
 }
 
-header("Location: $location_uri",true,$error);
+#header("Location: $content_uri",true,$error);
+header("Link: <$location_uri>; rel=\"edit-iri\";");
 header("Content-Location: $content_uri",true);
 header("Content-Type: application/rdf+xml",true);
-exit();
+header("Content-Length: $content_length",true);
+print_r($content);
+
+ob_end_flush();
+
 ?>

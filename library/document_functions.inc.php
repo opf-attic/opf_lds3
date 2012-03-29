@@ -127,8 +127,8 @@ function instantiateNewDocument($file_path,$local_dir,$date,$subject) {
 		copy($file_path,$final_file_path);
 		symlink($final_file_path,$latest_link);
 	}
-	exit();
-	addDocumentToIndex($final_file_path,$subject);
+
+	//addDocumentToIndex($final_file_path,$subject);
 
 	return true;
 }	
