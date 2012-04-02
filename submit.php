@@ -1,6 +1,5 @@
 <?php
 
-
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
 	header('HTTP/1.0 400 Bad Request');
 	echo "Bad Request";
@@ -26,6 +25,40 @@ if ( !$authorized ) {
         exit();
 }
 
+#Handle POST requests for existing documents 
+if (strpos($_SERVER["REQUEST_URI"],"?") > 0) {
+	$base_request_uri = substr($_SERVER["REQUEST_URI"],0,strpos($_SERVER["REQUEST_URI"],"?"));
+} else {
+	$base_request_uri = $_SERVER["REQUEST_URI"];
+}
+
+if ($base_request_uri != $_SERVER["PHP_SELF"]) {
+	include('config.php');
+	$requested_document = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+	if (substr($requested_document,strlen($requested_document)-1,strlen($requested_document)) == "/") {
+		$requested_document = substr($requested_document,0,strlen($requested_document)-1);
+	}
+	if (substr($requested_document,0,strlen($http_doc_prefix)) != $http_doc_prefix) {
+		outputHTTPHeader(400);
+		echo "Bad Request, the requested URI cannot be edited";
+		exit();
+	}
+	$input_guid = substr($requested_document,strlen($http_doc_prefix),strlen($requested_document));
+	require_once('functions.inc.php');
+	if (!isValidGUID($input_guid)) {
+		outputHTTPHeader(400);
+		echo "Bad Request, the requested URI cannot be edited, invalid GUID";
+		exit();
+	}
+	$local_path = getLocalFromGUID($input_guid);
+	if (!is_dir($local_path)) {
+		outputHTTPHeader(404);
+		echo "The requested URI, although valid, doesn't exist, thus can't be edited.";
+		exit();
+	}
+	$guid_uri = $requested_document;
+}
+
 $stuff = file_get_contents("php://input");
 $file_path = tempnam(sys_get_temp_dir(),'RDF_Admin');
 $handle = fopen($file_path,"w");
@@ -34,13 +67,21 @@ fclose($handle);
 
 $doc_uri = $_GET["Doc-URI"];
 
-list($error,$message) = addNewDocument($file_path,$user_key,$doc_uri);
-
-if (!$error) {
-	$uris = explode(" : ",$message);
-	$location_uri = $uris[0];
-	$content_uri = $uris[1];
-	$error = 201;
+if ($guid_uri) {
+	list($error,$message) = updateDocument($file_path,$guid_uri,$user_key,$doc_uri);
+	$location_uri = $guid_uri;
+	if (!$error) {
+		$content_uri = $message;
+		$error = 200;
+	}
+} else {
+	list($error,$message) = addNewDocument($file_path,$user_key,$doc_uri);
+	if (!$error) {
+		$uris = explode(" : ",$message);
+		$location_uri = $uris[0];
+		$content_uri = $uris[1];
+		$error = 201;
+	}
 }
 
 $content = "";
@@ -48,13 +89,13 @@ $handle = fopen($content_uri.".rdf","r");
 if (!$handle) {
 	$error = 500;	
 	$message = "Error while retrieving content. Please contact system administrator";
+} else {
+	while(!feof($handle)) {
+		$content .= fgets($handle);
+	}
+	fclose($handle);
+	$content_length = strlen($content);
 }
-while(!feof($handle)) {
-	$content .= fgets($handle);
-}
-fclose($handle);
-
-$content_length = strlen($content);
 
 ob_start();
 
