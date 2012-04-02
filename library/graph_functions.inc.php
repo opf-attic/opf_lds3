@@ -62,8 +62,20 @@ function writeGraphToFile($graph,$file_path) {
 }
 
 function reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri) {
+	if ($incoming_subject == "") {
+		return $file_path;
+	}
+
 	$data = file_get_contents($file_path);
-        $data = str_replace($incoming_subject,$guid_date_uri,$data);
+
+	//Account for tailing /'s with quotes.
+	if (strpos($data,$incoming_subject . '/"') > 0 || strpos($data,$incoming_subject . "/'") > 0) {
+	        $data = str_replace($incoming_subject . '/"',$guid_date_uri . '"',$data);
+        	$data = str_replace($incoming_subject . "/'",$guid_date_uri . "'",$data);
+        } else {
+		$data = str_replace($incoming_subject,$guid_date_uri,$data);
+	}
+
         $handle = fopen($file_path,"w");
         fwrite($handle,$data);
         fclose($handle);

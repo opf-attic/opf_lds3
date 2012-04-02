@@ -30,14 +30,14 @@ function addNewDocument($file_path,$user_key,$incoming_subject) {
 		return array ("400","GUID " . $guid . " already in use to update it please POST this document to " . $guid_uri);
 	}
 	
-	list ($error,$guid_date_uri) = updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key,$incoming_subject);
+	list ($error,$guid_date_uri) = updateDocument($file_path,$guid_uri,$user_key,$incoming_subject);
 
 	return array ($error,"$guid_uri : $guid_date_uri");
 
 }
 
 
-function updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key,$incoming_subject) {
+function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject) {
 
 	// Handle the upload need to sort out which URIs to re-write and rename
 	
@@ -55,8 +55,9 @@ function updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key,$inco
 	// Get all the paths
 	$local_dir = getLocalFromURI($guid_uri);
 
-	// Translate the incoming subject into our subject in the file
+	// Translate the incoming subject (or guid_uri) into our subject in the file
 	$file_path = reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri);
+	$file_path = reWriteGUIDDateURI($file_path,$guid_uri,$guid_date_uri);
 
 	// Get the RDF Grap
 	$graph = getGraph($file_path);
@@ -72,7 +73,7 @@ function updateDocument($file_path,$subject,$guid_uri,$file_name,$user_key,$inco
 		$previous = $provenance_info["previous"];
 
 		// 4s-remove the old document
-		removeDocumentFromIndex($previous);
+		#removeDocumentFromIndex($previous);
 	}
 	
 	$result = instantiateNewDocument($file_path,$local_dir,$date,$subject);
