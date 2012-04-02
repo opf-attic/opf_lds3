@@ -7,12 +7,13 @@ if ($_SERVER["REQUEST_METHOD"] != "POST" && $_SERVER["REQUEST_METHOD"] != "DELET
 }
 
 ini_set('include_path','.:include/:panels/:library/');
+require_once('connect.inc.php');
 require_once('rest_processor.inc.php');
 require_once('key_management.inc.php');
 require_once('user_functions.inc.php');
 require_once('http_functions.inc.php');
 require_once('document_functions.inc.php');
-require_once('connect.inc.php');
+require_once('expiry_functions.inc.php');
 
 $request_headers = apache_request_headers();
 $authorized = isRequestAuthorized($request_headers);
@@ -67,10 +68,13 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 	//Assume POST
 
 	$stuff = file_get_contents("php://input");
-	$file_path = tempnam(sys_get_temp_dir(),'RDF_Admin');
-	$handle = fopen($file_path,"w");
-	fwrite($handle,file_get_contents("php://input"));
-	fclose($handle);
+
+	if ($stuff == "") {
+		$file_path = getBlankDocumentRef();
+		$expiry_date = mktime() + 86400;
+	} else {
+		$file_path = writeDocumentToFile($stuff);
+	}
 
 	$doc_uri = $_GET["Doc-URI"];
 
@@ -78,19 +82,23 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 
 if ($guid_uri) {
-	list($error,$message) = updateDocument($file_path,$guid_uri,$user_key,$doc_uri);
+	list($error,$message) = updateDocument($file_path,$guid_uri,$user_key,$doc_uri,null);
 	$location_uri = $guid_uri;
 	if (!$error) {
-		$content_uri = $message;
 		$error = 200;
 	}
+	if ($error > 199 && $error < 300) {
+		$content_uri = $message;
+	}
 } else {
-	list($error,$message) = addNewDocument($file_path,$user_key,$doc_uri);
+	list($error,$message) = addNewDocument($file_path,$user_key,$doc_uri,$expiry_date);
 	if (!$error) {
+		$error = 201;
+	}
+	if ($error > 199 && $error < 300) {
 		$uris = explode(" : ",$message);
 		$location_uri = $uris[0];
 		$content_uri = $uris[1];
-		$error = 201;
 	}
 }
 
@@ -114,7 +122,7 @@ outputHTTPHeader($error);
 header("Cache-Control: no-cache, must-revalidate", true); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT", true);
 
-if ($error != 200 && $error != 201) {
+if ($error < 200 || $error > 299) {
 	echo $message;
 	exit();
 }

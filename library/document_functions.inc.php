@@ -6,7 +6,7 @@ include_once('library/user_functions.inc.php');
 include_once('library/graph_functions.inc.php');
 include_once('library/index_functions.inc.php');
 
-function addNewDocument($file_path,$user_key,$incoming_subject) {
+function addNewDocument($file_path,$user_key,$incoming_subject,$expiry_time) {
 	
 	$graph = getGraph($file_path);
 	if (!$graph) {
@@ -30,18 +30,25 @@ function addNewDocument($file_path,$user_key,$incoming_subject) {
 		return array ("400","GUID " . $guid . " already in use to update it please POST this document to " . $guid_uri);
 	}
 	
-	list ($error,$guid_date_uri) = updateDocument($file_path,$guid_uri,$user_key,$incoming_subject);
+	list ($error,$guid_date_uri) = updateDocument($file_path,$guid_uri,$user_key,$incoming_subject,$expiry_time);
+
+	if (!$error) {
+		addExpiryToDatabaseIndex($guid,$expiry_time);
+		$error = 202;	
+	}
 
 	return array ($error,"$guid_uri : $guid_date_uri");
 
 }
 
 
-function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject) {
+function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject,$expiry_time) {
 
 	// Handle the upload need to sort out which URIs to re-write and rename
 	
 	$date = date("c");
+
+	$guid = getGUIDFromURI($guid_uri);
 
 	// Add the date to a pre-defined URI
 	$guid_date_uri = getGUIDDateURI($guid_uri,$date);
@@ -59,6 +66,10 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject) {
 	$file_path = reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri);
 	$file_path = reWriteGUIDDateURI($file_path,$guid_uri,$guid_date_uri);
 
+	if (isReservedGUID($guid)) {
+		removeExpiredDocumentsForGUID($guid);
+	}
+
 	// Get the RDF Grap
 	$graph = getGraph($file_path);
 	
@@ -66,6 +77,8 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject) {
 	
 	$provenance_info = getProvenanceInfo($guid_uri,$subject,$local_dir);	
 	$graph = addProvenanceInfoToGraph($graph,$subject,$provenance_info);
+
+	$graph = addExpiryTimeToGraph($graph,$subject,$expiry_time);
 
 	$file_path = writeGraphToFile($graph,$file_path);
 
@@ -170,19 +183,20 @@ function getCurrentDocumentURL($subject,$local_dir) {
 
 function getBlankDocumentRef() {
 	
-	$file_path = tempnam(sys_get_temp_dir(),"RDF_Admin");
-	$handle = fopen($file_path,"w");
-
 	$data = getBlankDocumentData();
 
-	if ($handle) {
-		fwrite($handle,$data);
-	}
+	return writeDocumentToFile($data);
+	
+}
 
+function writeDocumentToFile($data) {
+
+	$file_path = tempnam(sys_get_temp_dir(),'RDF_Admin');
+	$handle = fopen($file_path,"w");
+	fwrite($handle,$data);
 	fclose($handle);
 	
 	return $file_path;
-	
 }
 
 function getBlankDocumentData() {

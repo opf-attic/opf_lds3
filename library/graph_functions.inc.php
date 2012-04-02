@@ -30,6 +30,24 @@ function addProvenanceInfoToGraph($graph,$subject,$info) {
 
 	return $graph;
 }
+	
+function addExpiryTimeToGraph($graph,$subject,$expiry_time) {
+
+	if (!$expiry_time) {
+		return $graph;
+	}
+	
+	$to_add = '
+		@prefix wdrs: <http://www.w3.org/2007/05/powder-s#> .
+
+		<' . $subject .'>
+		wdrs:validuntil "'. date("r",$expiry_time) .'" .
+		';
+	$added = $graph->addTurtle($subject,$to_add);
+
+	return $graph;
+
+}
 
 function getExistingGUIDFromFile($file_path) {
 	require('config.php');

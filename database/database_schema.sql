@@ -18,3 +18,10 @@ create table Access_Keys (
 	enabled int(2) not null,
 	primary key (id)
 );
+
+DROP table if exists Expires_Index;
+create table Expires_Index (
+	guid varchar(255) not null,
+	expiry_time int(11) not null,
+	primary key (guid)
+);
