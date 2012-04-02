@@ -64,7 +64,7 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject) {
 	
 	$graph = addUserDataToGraph($graph,$subject,$date,$user_key);
 	
-	$provenance_info = getProvenanceInfo($guid_uir,$subject,$local_dir);	
+	$provenance_info = getProvenanceInfo($guid_uri,$subject,$local_dir);	
 	$graph = addProvenanceInfoToGraph($graph,$subject,$provenance_info);
 
 	$file_path = writeGraphToFile($graph,$file_path);
@@ -150,7 +150,6 @@ function getProvenanceInfo($guid_uri,$subject,$local_dir) {
 			$info["previous"] = $previous;
 		}
 	}
-	
 	return $info;	
 
 }	
