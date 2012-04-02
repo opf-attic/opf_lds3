@@ -73,7 +73,8 @@ function reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri) {
 	        $data = str_replace($incoming_subject . '/"',$guid_date_uri . '"',$data);
         	$data = str_replace($incoming_subject . "/'",$guid_date_uri . "'",$data);
         } else {
-		$data = str_replace($incoming_subject,$guid_date_uri,$data);
+		$data = str_replace($incoming_subject . '"',$guid_date_uri . '"',$data);
+		$data = str_replace($incoming_subject . "'",$guid_date_uri . "'",$data);
 	}
 
         $handle = fopen($file_path,"w");
