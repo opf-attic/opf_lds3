@@ -62,7 +62,10 @@ function getCanonicalizedHeaders($headers) {
 	if (substr($remainder,-1) == "/") {
 		$remainder = substr($remainder,0,strlen($remainder)-1);
 	}
-	return $remainder . $requested_path;
+
+	$canonicalized_headers = $remainder . $requested_path;
+	
+	return $canonicalized_headers;
 }
 
 function getCanonicalizedResource($headers) {
@@ -74,6 +77,10 @@ function getCalculatedSignature($user_key,$headers) {
 	$canonicalized_headers = getCanonicalizedHeaders($headers);
 	$canonicalized_resource = getCanonicalizedResource($headers);
 
+	if (substr($canonicalized_resource,0,strlen('/doc/')) == '/doc/') {
+		$canonicalized_headers = '';
+	}
+
 	$secret_key = getSecretKey($user_key);
 	$headers = getArrayHeaders($headers);
 
@@ -84,7 +91,6 @@ function getCalculatedSignature($user_key,$headers) {
 			$canonicalized_headers .
 			$canonicalized_resource;
 
-	
 	return(base64_encode(hash_hmac("sha1", utf8_encode($string_to_sign), utf8_encode($secret_key), true)));
 
 }
