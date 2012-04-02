@@ -76,6 +76,17 @@ function getLocalFromURI($uri)
 	return str_replace($http_doc_prefix, $local_doc_prefix, $uri);
 }
 
+function getGUIDFromURI($guid_uri) 
+{
+	require('config.php');
+	
+	$uri = str_replace($http_doc_prefix, "", $guid_uri);
+	if (substr($uri,-4) == ".rdf") {
+		$uri = substr($uri,0,strrpos($uri,"/"));
+	}
+	return $uri;
+}
+
 function getGUIDURIFromLocal($local) 
 {
 	require('config.php');
