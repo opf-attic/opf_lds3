@@ -168,4 +168,33 @@ function getCurrentDocumentURL($subject,$local_dir) {
 	return $null;
 }
 
+function getBlankDocumentRef() {
+	
+	$file_path = tempnam(sys_get_temp_dir(),"RDF_Admin");
+	$handle = fopen($file_path,"w");
+
+	$data = getBlankDocumentData();
+
+	if ($handle) {
+		fwrite($handle,$data);
+	}
+
+	fclose($handle);
+	
+	return $file_path;
+	
+}
+
+function getBlankDocumentData() {
+	$data = '<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	 xmlns:dcterms="http://purl.org/dc/terms/">
+
+</rdf:RDF>';
+
+	return $data;
+}
+
+
 ?>

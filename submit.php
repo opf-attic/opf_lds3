@@ -1,6 +1,6 @@
 <?php
 
-if ($_SERVER["REQUEST_METHOD"] != "POST") {
+if ($_SERVER["REQUEST_METHOD"] != "POST" && $_SERVER["REQUEST_METHOD"] != "DELETE") {
 	header('HTTP/1.0 400 Bad Request');
 	echo "Bad Request";
 	exit();
@@ -59,13 +59,23 @@ if ($base_request_uri != $_SERVER["PHP_SELF"]) {
 	$guid_uri = $requested_document;
 }
 
-$stuff = file_get_contents("php://input");
-$file_path = tempnam(sys_get_temp_dir(),'RDF_Admin');
-$handle = fopen($file_path,"w");
-fwrite($handle,file_get_contents("php://input"));
-fclose($handle);
+if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
-$doc_uri = $_GET["Doc-URI"];
+	$file_path = getBlankDocumentRef();
+
+} else {
+	//Assume POST
+
+	$stuff = file_get_contents("php://input");
+	$file_path = tempnam(sys_get_temp_dir(),'RDF_Admin');
+	$handle = fopen($file_path,"w");
+	fwrite($handle,file_get_contents("php://input"));
+	fclose($handle);
+
+	$doc_uri = $_GET["Doc-URI"];
+
+} 
+
 
 if ($guid_uri) {
 	list($error,$message) = updateDocument($file_path,$guid_uri,$user_key,$doc_uri);
