@@ -34,7 +34,7 @@ if (strpos($_SERVER["REQUEST_URI"],"?") > 0) {
 
 if ($base_request_uri != $_SERVER["PHP_SELF"]) {
 	include('config.php');
-	$requested_document = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+	$requested_document = "http://" . $_SERVER["HTTP_HOST"] . $base_request_uri;
 	if (substr($requested_document,strlen($requested_document)-1,strlen($requested_document)) == "/") {
 		$requested_document = substr($requested_document,0,strlen($requested_document)-1);
 	}
