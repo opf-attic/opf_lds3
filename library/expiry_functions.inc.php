@@ -3,6 +3,9 @@
 	require_once('connect.inc.php');
 	
 	function addExpiryToDatabaseIndex($guid,$expiry_time) {
+		if (!$expiry_time) {
+			return;
+		}
 		$query = "INSERT INTO Expires_Index values('$guid','$expiry_time');";
 		$res = mysql_query($query);
 	}
@@ -57,7 +60,7 @@
 			$dir .= '/'; 
 		}
 
-		if ($handle = opendir($dir)) { 
+		if ($handle = @opendir($dir)) { 
 			while ($obj = readdir($handle)) { 
 				if ($obj != '.' && $obj != '..') { 
 					if (is_dir($dir.$obj)) { 
