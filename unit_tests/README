@@ -1,0 +1,8 @@
+To use these unit tests you need Graphite from http://graphite.ecs.soton.ac.uk
+
+Then you need to change the two includes in all the places they occur in all the files to point at your version of Graphite. 
+
+Currently these lines are:
+
+include_once('libraries/Graphite/Graphite.php');
+include_once('libraries/arc2/ARC2.php');
