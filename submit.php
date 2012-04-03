@@ -15,6 +15,12 @@ require_once('http_functions.inc.php');
 require_once('document_functions.inc.php');
 require_once('expiry_functions.inc.php');
 
+// Remove expired documents which were previously created
+
+removeAllExpiredGUIDs();
+
+
+// Authorisation Section 
 $request_headers = apache_request_headers();
 $authorized = isRequestAuthorized($request_headers);
 $authentication_header = getAuthenticationHeader($request_headers);
@@ -26,13 +32,14 @@ if ( !$authorized ) {
         exit();
 }
 
-#Handle POST requests for existing documents 
+// Handle POST requests for existing documents 
 if (strpos($_SERVER["REQUEST_URI"],"?") > 0) {
 	$base_request_uri = substr($_SERVER["REQUEST_URI"],0,strpos($_SERVER["REQUEST_URI"],"?"));
 } else {
 	$base_request_uri = $_SERVER["REQUEST_URI"];
 }
 
+// Check request for valid and existing guid that can be updated
 if ($base_request_uri != $_SERVER["PHP_SELF"]) {
 	include('config.php');
 	$requested_document = "http://" . $_SERVER["HTTP_HOST"] . $base_request_uri;
@@ -60,6 +67,8 @@ if ($base_request_uri != $_SERVER["PHP_SELF"]) {
 	$guid_uri = $requested_document;
 }
 
+// TODO: Auth the request against the document to see if this user can edit/delete it. 
+
 if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 	$file_path = getBlankDocumentRef();
@@ -80,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 } 
 
-
+// OPERATIONS SECTION 
 if ($guid_uri) {
 	list($error,$message) = updateDocument($file_path,$guid_uri,$user_key,$doc_uri,null);
 	$location_uri = $guid_uri;
@@ -115,6 +124,7 @@ if (!$handle) {
 	$content_length = strlen($content);
 }
 
+// OUTPUT SECTION 
 ob_start();
 
 outputHTTPHeader($error);
@@ -127,7 +137,6 @@ if ($error < 200 || $error > 299) {
 	exit();
 }
 
-#header("Location: $content_uri",true,$error);
 header("Link: <$location_uri>; rel=\"edit-iri\";");
 header("Content-Location: $content_uri",true);
 header("Content-Type: application/rdf+xml",true);
