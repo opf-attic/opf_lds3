@@ -69,6 +69,17 @@ if ($base_request_uri != $_SERVER["PHP_SELF"]) {
 
 // TODO: Auth the request against the document to see if this user can edit/delete it. 
 
+$edit_permitted = true;
+if ($guid_uri) {
+	$edit_permitted = userCanEdit($user_key,$guid_uri);
+}
+
+if (!$edit_permitted) {
+        header("HTTP/1.0 403 Forbidden");
+        echo "Access Denied";
+        exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 	$file_path = getBlankDocumentRef();

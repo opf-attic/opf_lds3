@@ -132,4 +132,47 @@
 	        return $graph;
 	}
 
+	function getUserKeyFromURI($user_key_uri) {
+		#FIXME: This function is a bit stupid
+
+		return substr($user_key_uri,strrpos($user_key_uri,"/")+1,strlen($user_key_uri));
+	}
+
+	function userCanEdit($user_key,$guid_uri) {
+		$local_dir = getLocalFromURI($guid_uri);
+		$current = getLocalFromURI(getCurrentDocumentURL($guid_uri,$local_dir));
+		$graph = getGraph($file_path);
+		$subject = getGUIDURIFromLocal($current);
+		$graph = getGraph($current . ".rdf");
+
+		$resource = $graph->resource($subject);
+
+		foreach ($resource->all("dct:publisher") as $user_key_uri) {
+			$user_key_in = getUserKeyFromURI($user_key_uri);
+			
+			// Strait match on the key
+			if ($user_key_in == $user_key) {
+				return true;
+			}
+		
+			$query = "select user_id from Access_Keys where Access_Keys.access_key='$user_key_in';";
+			$res = mysql_query($query);
+			$row = @mysql_fetch_row($res);
+			$user_check = @$row[0];
+	
+			$query = "select user_id from Access_Keys where Access_Keys.access_key='$user_key';";
+			$res = mysql_query($query);
+			$row = @mysql_fetch_row($res);
+			$user_in = @$row[0];
+
+			if ($user_check == $user_in) {
+				return true;
+			}
+			
+		}
+
+		return false;
+		
+	}
+
 ?>
