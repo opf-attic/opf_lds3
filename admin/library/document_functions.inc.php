@@ -4,7 +4,7 @@ include_once('library/rdf_functions.inc.php');
 include_once('library/functions.inc.php');
 include_once('library/user_functions.inc.php');
 include_once('library/graph_functions.inc.php');
-include_once('library/index_functions.inc.php');
+include_once('library/4store_functions.inc.php');
 
 function addNewDocument($file_path,$user_key,$incoming_subject,$expiry_time) {
 	
@@ -86,7 +86,7 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject,$expiry
 		$previous = $provenance_info["previous"];
 
 		// 4s-remove the old document
-		#removeDocumentFromIndex($previous);
+		removeDocumentFromIndex($previous);
 	}
 	
 	$result = instantiateNewDocument($file_path,$local_dir,$date,$subject);
@@ -146,7 +146,7 @@ function instantiateNewDocument($file_path,$local_dir,$date,$subject) {
 		symlink($final_file_path,$latest_link);
 	}
 
-	//addDocumentToIndex($final_file_path,$subject);
+	addDocumentToIndex($final_file_path,$subject);
 
 	return true;
 }	

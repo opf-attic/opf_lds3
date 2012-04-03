@@ -13,6 +13,7 @@ require_once('key_management.inc.php');
 require_once('user_functions.inc.php');
 require_once('http_functions.inc.php');
 require_once('document_functions.inc.php');
+require_once('4store_functions.inc.php');
 require_once('expiry_functions.inc.php');
 
 // Remove expired documents which were previously created
