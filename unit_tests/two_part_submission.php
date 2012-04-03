@@ -72,10 +72,10 @@ if ($accessKey != "" and $secretKey != "" and $dsURL != "" and $iriPrefix != "")
 	echo '<br/><br/>';
 	echo '<span style="font-size: 2em">';
 	if ($return["location"]) {
-		echo 'Document Location <a href="'.$location_url.'">'.$location_url.'</a><br/>';
-	} 
-	if ($return["s1_editiri"] and $s1_editiri == $s2_editiri) {
-		echo 'Edit-IRI <a href="'.$s1_editiri.'">'.$s1_editiri.'</a><br/>';
+		echo 'Document Location <a href="'.$location_url.'" style="font-size: 0.5em;">'.$location_url.'</a><br/>';
+	}
+	if ($return["editiri"]) {
+		echo 'Edit-IRI <a href="'.$editiri.'" style="font-size: 0.5em;">'.$editiri.'</a><br/>';
 	}
 	echo '</span>';
 } else {

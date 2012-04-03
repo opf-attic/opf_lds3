@@ -284,12 +284,12 @@ if ($debug) {
 		echo '</table>';
 		echo '<br/><br/>';
 		echo '<span style="font-size: 2em">';
-		if ($return["location"]) {
-			echo 'Document Location <a href="'.$location_url.'">'.$location_url.'</a><br/>';
-		} 
-		if ($return["editiri"]) {
-			echo 'Edit-IRI <a href="'.$editiri.'">'.$editiri.'</a><br/>';
-		}
+                if ($return["location"]) {
+                        echo 'Document Location <a href="'.$location_url.'" style="font-size: 0.5em;">'.$location_url.'</a><br/>';
+                }
+                if ($return["editiri"]) {
+                        echo 'Edit-IRI <a href="'.$editiri.'" style="font-size: 0.5em;">'.$editiri.'</a><br/>';
+                }
 		echo '</span>';
 	}
 } else {
