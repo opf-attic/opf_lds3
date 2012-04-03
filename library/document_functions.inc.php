@@ -139,7 +139,7 @@ function instantiateNewDocument($file_path,$local_dir,$date,$subject) {
 		symlink($final_file_path,$latest_link);
 	} else {
 		// Make the directory
-		mkdir($local_dir);
+		mkdir($local_dir,0775,true);
 
 		// Copy the new document into place and link it to latest
 		copy($file_path,$final_file_path);

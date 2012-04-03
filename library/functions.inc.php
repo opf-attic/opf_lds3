@@ -1,5 +1,13 @@
 <?php
 
+function translateGUID($guid) {
+	$first = substr($guid,0,2);
+	$second = substr($guid,2,2);
+	$third = substr($guid,4,4);
+	$rest = substr($guid,9,strlen($guid));
+
+	return $first . "/" . $second . "/" . $third . "/" . $rest;
+}
 
 function getGUID() {
 	include_once('config.php');
@@ -17,14 +25,16 @@ function GenerateGUID()
 {
     if (function_exists('com_create_guid') === true)
     {
-        return trim(com_create_guid(), '{}');
+        $guid = trim(com_create_guid(), '{}');
+	return translateGUID($guid);
     }
 
-    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    $guid = sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    return translateGUID($guid);
 }
 
 function isValidGUID($guid) {
-	if (preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $guid)) {
+	if (preg_match('/^\{?[A-Z0-9]{2}\/[A-Z0-9]{2}\/[A-Z0-9]{4}\/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $guid)) {
 		return true;
 	}
 	return false;
@@ -35,7 +45,7 @@ function getGUIDFromSubject($subject) {
 		
 	if (substr($subject,0,strlen($http_doc_prefix)) == $http_doc_prefix) {
 		$id = substr($subject,(strpos($subject,$http_doc_prefix) + strlen($http_doc_prefix)),strlen($subject));
-		$id = @substr($id,0,strlen("A98C5A1E-A742-4808-96FA-6F409E799937"));
+		$id = @substr($id,0,strlen("A9/8C/5A1E/A742-4808-96FA-6F409E799937"));
 		return $id;
 	}
 	return null;
