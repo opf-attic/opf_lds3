@@ -43,7 +43,7 @@ if ($accessKey != "" and $secretKey != "" and $dsURL != "" and $iriPrefix != "")
 	list ($s1_editiri, $return) = stage1($accessKey, $secretKey, $dsURL, $iriPrefix, $show_content, $http_method, $authentication_service);
 
 	if ($s1_editiri != "") {
-		list ($s2_editiri,  $location_url, $return) = stage2($accessKey, $secretKey, $s1_editiri . "/", $iriPrefix, $show_content, $http_method, $authentication_service);
+		list ($s2_editiri,  $location_url, $return) = stage2($accessKey, $secretKey, $s1_editiri, $iriPrefix, $show_content, $http_method, $authentication_service);
 	}
 		
 	if ($s1_editiri != $s2_editiri or $s1_editiri == "") {
