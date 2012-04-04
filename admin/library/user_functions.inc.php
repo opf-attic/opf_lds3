@@ -96,7 +96,7 @@
 		$key_description = getAccessKeyDescription($user_key);
 
 		$user_uri = $id_uri_prefix . "users/" . $user_id;
-		$access_key_uri = $id_uri_prefix . "users/".$user_id . "/access_keys/" . $user_key;
+		$access_key_uri = $id_uri_prefix . "access_keys/" . $user_key;
 		
 		$to_add = '
 			@prefix dct: <http://purl.org/dc/terms/> .
