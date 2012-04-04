@@ -104,3 +104,18 @@
 	height: 5px;
 	font-size: 0.1em;
 }
+.userheader {
+	float: right;
+	padding-top: 10px;
+	color: black;
+}
+.sitetitle {
+	float: left;	
+	padding-top: 10px;
+	color: black;
+	font-size: 2em;
+	padding-left: 10px;
+	font-family: Courier, sans-serif;
+	font-weight: bold;
+	
+}

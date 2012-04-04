@@ -31,13 +31,16 @@
 <body>
 <div id="page">
 	<nav>
-	<div width="100%" align="right" style="height: 54px; background: url(/admin/site_images/banner.png) no-repeat 0% 0%; color: white;">
+	<div width="100%" align="right" style="height: 54px; background: url(/admin/lds3_images/banner.png) no-repeat 0% 0%; color: white;">
+		<span class="sitetitle">
+			<?php echo $company_name . " Data"; ?>
+		</span>
 		<?php
 			if ($_SESSION["user_pic"]) {
 				echo '<img src="' . $_SESSION["user_pic"] . '" style="float: right;" height="40px" border="0"/>';
 			}
 			if ($_SESSION["user_name"]) {
-				echo '<span style="float:right; padding-top: 10px;">' . $_SESSION["user_name"] . '&nbsp;(<a href="glogin.php?logout">Logout</a>)&nbsp;&nbsp;</span>';
+				echo '<span class="userheader">' . $_SESSION["user_name"] . '&nbsp;(<a href="glogin.php?logout">Logout</a>)&nbsp;&nbsp;</span>';
 			}
 		?>	
 	</div>
