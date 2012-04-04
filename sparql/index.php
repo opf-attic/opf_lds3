@@ -47,7 +47,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX opf: <http://data.openplanetsfoundation.org/schema/#>
+PREFIX lds: <http://schema.lds3.org/>
 
 SELECT * WHERE {
     ?s rdfs:label ?o
@@ -61,7 +61,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX opf: <http://data.openplanetsfoundation.org/schema/#>
+PREFIX lds: <http://schema.lds3.org/>
 
 SELECT * WHERE {
     ?s rdfs:label ?o
