@@ -77,7 +77,7 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject,$expiry
 	$graph = addUserDataToGraph($graph,$subject,$date,$user_key);
 	
 	$provenance_info = getProvenanceInfo($guid_uri,$subject,$local_dir);	
-	$graph = addProvenanceInfoToGraph($graph,$subject,$provenance_info);
+	$graph = addProvenanceInfoToGraph($graph,$subject,$provenance_info,$guid_uri);
 
 	$graph = addExpiryTimeToGraph($graph,$subject,$expiry_time);
 

@@ -1,10 +1,20 @@
 <?php
 
-function addProvenanceInfoToGraph($graph,$subject,$info) {
+function addProvenanceInfoToGraph($graph,$subject,$info,$guid_uri) {
+	
+	$to_add = '
+		@prefix dct: <http://purl.org/dc/terms/> .
+
+		<' . $subject .'>
+		dct:isVersionOf <'.$guid_uri.'> .
+		';
+	$added = $graph->addTurtle($subject,$to_add);
 
 	if (!$info) {
 		return $graph;
 	}
+
+
 
 	if ($info["restored_from"]) {
 		$restored_from = urlencode($info["restored_from"]);
