@@ -10,7 +10,7 @@
 	</div>
 	<nav class="topnav">
 <?php
-	include('upload_panel.html');
+//	include('upload_panel.html');
 	include('operations_panel.html');
 ?>
 	</nav>
