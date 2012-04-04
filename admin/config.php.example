@@ -11,6 +11,9 @@
 
 	# The local path which the web server can write to to store the documents
 	$local_doc_prefix = "/home/dev.company.org/data/doc/";
+	
+	# The local path to the puelia cache dir, so it can be flushed each time a document update takes place
+	$puelia_cache_dir = "/home/dev.company.org/public_html/puelia/cache/";
 
 	# The ID prefix where both information and non-information resource objects are "stored";
 	$id_uri_prefix = "http://dev.company.org/id/";
