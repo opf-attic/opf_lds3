@@ -14,6 +14,9 @@
 	
 	# The local path to the puelia cache dir, so it can be flushed each time a document update takes place
 	$puelia_cache_dir = "/home/dev.company.org/public_html/puelia/cache/";
+	
+	# The local path to the puelia api-config-files directory (note this must be writable by the web server user)
+	$puelia_api_config_files_dir = "/home/dev.company.org/config/";
 
 	# The ID prefix where both information and non-information resource objects are "stored";
 	$id_uri_prefix = "http://dev.company.org/id/";
