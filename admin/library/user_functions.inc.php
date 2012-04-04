@@ -110,21 +110,25 @@
 		
 		$to_add = '
 			@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+			@prefix lds: <http://schema.lds3.org/> .
 	
 			<' . $user_uri .'>
 			foaf:name "'.$user_name.'";
-			foaf:account <'.$access_key_uri.'>.
+			foaf:account <'.$access_key_uri.'>;
+			rdf:type <http://schema.lds3.org/User> .
 		    ';
 		
 		$added = $graph->addTurtle($user_uri,$to_add);
 		
 		$to_add = '
 			@prefix dct: <http://purl.org/dc/terms/> .
+			@prefix lds: <http://schema.lds3.org/> .
 	
 			<' . $access_key_uri .'>
 			dct:identifier "'.$user_key.'";
 			dct:description "'.$key_description.'";
-			dct:creator <'.$user_uri.'>.
+			dct:creator <'.$user_uri.'>;
+			rdf:type <http://schema.lds3.org/Access_Key>.
 		    ';
 
 		$added = $graph->addTurtle($access_key_uri,$to_add);

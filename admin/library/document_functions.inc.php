@@ -72,7 +72,8 @@ function updateDocument($file_path,$guid_uri,$user_key,$incoming_subject,$expiry
 
 	// Get the RDF Grap
 	$graph = getGraph($file_path);
-	
+
+	$graph = addDocumentTypeToGraph($graph,$subject);
 	$graph = addUserDataToGraph($graph,$subject,$date,$user_key);
 	
 	$provenance_info = getProvenanceInfo($guid_uri,$subject,$local_dir);	

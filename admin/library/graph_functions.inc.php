@@ -9,10 +9,10 @@ function addProvenanceInfoToGraph($graph,$subject,$info) {
 	if ($info["restored_from"]) {
 		$restored_from = urlencode($info["restored_from"]);
 		$to_add = '
-			@prefix opf: <http://data.openplanetsfoundation.org/schema/#> .
+			@prefix lds: <http://schema.lds3.org/> .
 	
 			<' . $subject .'>
-			opf:restored_from <'.$restored_from.'>;
+			lds:restored_from <'.$restored_from.'>;
 		    ';
 
 		$added = $graph->addTurtle($subject,$to_add);
@@ -99,6 +99,20 @@ function reWriteGUIDDateURI($file_path,$incoming_subject,$guid_date_uri) {
         fwrite($handle,$data);
         fclose($handle);
 	return $file_path;
+}
+	
+function addDocumentTypeToGraph($graph,$subject) {
+	
+	$to_add = '
+		@prefix lds: <http://schema.lds3.org/> .
+
+		<' . $subject .'>
+		rdf:type lds:Graph .
+	';
+
+	$added = $graph->addTurtle($subject,$to_add);
+
+	return $graph;
 }
 
 
