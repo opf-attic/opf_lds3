@@ -40,6 +40,7 @@ function createNewKeyPair($user_id,$description) {
 
 function generateRandomKey() {
 	$guid = GenerateGUID();
+	$guid = str_replace("/","",$guid);
 	$guid = str_replace("-","",$guid);
 	$key = substr($guid,0,20);
 	return $key;	
@@ -48,6 +49,8 @@ function generateRandomKey() {
 function generateRandomSecret() {
 	$guid1 = GenerateGUID();
 	$guid2 = strtolower(GenerateGUID());
+	$guid1 = str_replace("/","",$guid1);
+	$guid2 = str_replace("/","",$guid2);
 	$guid1 = str_replace("-","",$guid1);
 	$guid2 = str_replace("-","",$guid2);
 	$guid = splice($guid1,$guid2);
