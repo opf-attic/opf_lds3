@@ -33,5 +33,9 @@
 
 	# Require account moderation before people can create access keys and upload data into the system?
 	$moderate_accounts = false;
+	
+	# The http locations of the sparql and data prefix for 4store
+	$index_edit_url = "http://localhost:5052/data/";
+	$remote_store_endpoint = "http://localhost:5052/sparql/";
 
 ?>
