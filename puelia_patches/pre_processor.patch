@@ -1,0 +1,6 @@
+@@ -1,4 +1,5 @@
+ <?php
++include('pre_processor.php');
+ require 'deployment.settings.php';
+ require_once 'lda.inc.php';
+ require 'setup.php';

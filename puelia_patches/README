@@ -1,0 +1,8 @@
+1st May 2012
+
+# The Pre_Processor
+cp pre_processor.php ../puelia/
+patch ../puelia/index.php pre_processor.patch
+
+# Fix the urlencoding issues in puelia
+patch ../puelia/graphs/configgraph.class.php puelia_graph_patch.patch

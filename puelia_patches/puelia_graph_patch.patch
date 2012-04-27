@@ -1,0 +1,18 @@
+@@ -299,7 +299,7 @@
+         if(preg_match('@^'.$uriTemplateRegex.'$@', $path, $pathMatches)){
+             $variableValuesFromPath = array();
+             foreach($templateVariables as $n => $templateVariable){
+-                $variableValuesFromPath[$templateVariable] = array('value'=> urldecode($pathMatches[$n+1]), 'source' => 'request');
++                $variableValuesFromPath[$templateVariable] = array('value'=> $pathMatches[$n+1], 'source' => 'request');
+             }
+             return $variableValuesFromPath;
+         } else {
+@@ -359,7 +359,7 @@
+         if($valueType==RDFS.'Resource'
+           AND isset($props['source']) 
+           AND $props['source']=='request'){ 
+-            $props['value'] = urlencode($props['value']);
++#            $props['value'] = urlencode($props['value']);
+           }
+             $value = str_replace('{'.$name.'}', $props['value'], $value);
+         }
