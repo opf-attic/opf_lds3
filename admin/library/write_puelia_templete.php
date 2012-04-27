@@ -312,8 +312,8 @@ spec:exampleDataSelector
 
 spec:exampleDataItem
 	a api:ItemEndpoint ;
-	api:uriTemplate "/doc/{NodeID}" ;
-	api:itemTemplate "http://'.$base_domain.'/doc/{NodeID}" ;
+	api:uriTemplate "/doc/{GUID1}/{GUID2}/{GUID3}/{GUID4}/{Date}" ;
+	api:itemTemplate "http://'.$base_domain.'/doc/{GUID1}/{GUID2}/{GUID3}/{GUID4}/{Date}" ;
 	dct:description "Individual Entries of Document/Graph Data." ;
 	.
 
