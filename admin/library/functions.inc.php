@@ -124,6 +124,13 @@ function latestVersionURI($local_path)
 	return str_replace($local_doc_prefix,$http_doc_prefix,readlink($latest_link));
 }
 
+function getAbsoluteLatestVersionURI($latest_uri) {
+	$local = getLocalFromURI($latest_uri);
+	$local = realpath($local);
+	$uri = getURIFromLocal($local);
+	return $uri;	
+}
+
 
 function getDocArray($path)
 {
