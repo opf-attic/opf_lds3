@@ -29,6 +29,7 @@ function addProvenanceInfoToGraph($graph,$subject,$info,$guid_uri) {
 	}
 
 	if ($info["previous"]) {
+		$previous = $info["previous"];
 		$to_add = '
 			@prefix dct: <http://purl.org/dc/terms/> .
 
