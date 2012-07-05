@@ -1,25 +1,47 @@
 <?php
 
 
-function addDocumentToIndex($final_file_path,$subject) {
+function addDocumentToIndex($final_file_path,$subject,$count = 0) {
 	
 	include('config.php');
 
 	$cmd = 'curl -T ' . $final_file_path . " " . $index_edit_url . $subject;
 
-	exec($cmd);
+	exec($cmd,$ret);
+
+	$line = $ret[0];
+        $bits = explode(" ",$line);
+        $code = $bits[0];
+
+        if (($code < 200 || $code > 299) && $count < $retry_limit) {
+		$count++;
+                addDocumentToIndex($final_file_path,$subject,$count);
+        } elseif (($code < 200 || $code > 299) && $count >= $retry_limit) {
+		return false;
+	}
 
 	clearPueliaCache();
 
 }
 
-function removeDocumentFromIndex($previous) {
+function removeDocumentFromIndex($previous,$count = 0) {
 	
 	include('config.php');
 
 	$cmd = "curl -X DELETE '".$index_edit_url.$previous."'";
 
-        exec($cmd);
+        exec($cmd,$ret);
+
+	$line = $ret[0];
+        $bits = explode(" ",$line);
+        $code = $bits[0];
+
+        if (($code < 200 || $code > 299) && $count < $retry_limit) {
+		$count++;
+		removeDocumentFromIndex($previous,$count);
+        } elseif (($code < 200 || $code > 299) && $count >= $retry_limit) {
+		return false;
+	}
 
 	clearPueliaCache();
 

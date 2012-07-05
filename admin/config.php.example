@@ -38,4 +38,6 @@
 	$index_edit_url = "http://localhost:5052/data/";
 	$remote_store_endpoint = "http://localhost:5052/sparql/";
 
+	# Retry limit for posting document to triple/quad store
+	$retry_limit = 10;
 ?>
